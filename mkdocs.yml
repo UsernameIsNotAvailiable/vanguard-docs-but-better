@@ -3,7 +3,7 @@ site_description: Complete guides and API reference for the Vanguard Roblox appl
 site_author: TwrblxDevs
 site_url: !ENV [SITE_URL, "https://twrblxdevs.github.io/VanguardDocs/"]
 repo_name: !ENV [REPO_NAME, "TwrblxDevs/VanguardDocs"]
-repo_url: !ENV [REPO_URL, "https://github.com/TwrblxDevs/VanguardDocs"]
+repo_url: !ENV [REPO_URL, "https://github.com/TwrblxDevs/vanguard-docs"]
 edit_uri: edit/main/docs/
 
 theme:
@@ -118,7 +118,7 @@ extra_javascript:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: !ENV [REPO_URL, "https://github.com/TwrblxDevs/VanguardDocs"]
+      link: !ENV [REPO_URL, "https://github.com/TwrblxDevs/vanguard-docs"]
       name: Vanguard documentation on GitHub
 
 copyright: Copyright &copy; 2026 TwrblxDevs. Vanguard is available under the MIT License.
