@@ -1,6 +1,6 @@
 # Classes
 
-Vanguard provides a lightweight class utility plus independent server and client class registries. Classes support constructors, inheritance, callable class tables, inherited methods and metamethods, and runtime type checks.
+Vanguard provides a lightweight class utility plus independent server and client class registries. Classes support constructors, inheritance, callable class tables, inherited methods and metamethods, runtime type checks, and grouped public, private, and static members.
 
 ## Create and Register a Class
 
@@ -29,6 +29,140 @@ local second = Entity("entity-2")
 
 Both forms are equivalent.
 
+## Public, Private, And Static Members
+
+Vanguard `0.1.14` adds optional access groups while preserving legacy top-level
+class definitions.
+
+```lua
+local Wallet
+Wallet = Vanguard.CreateClass({
+	Name = "Wallet",
+
+	Private = {
+		Balance = 0,
+		History = {},
+
+		Constructor = function(_self, private, openingBalance)
+			private.Balance = openingBalance
+		end,
+
+		Record = function(_self, private, amount)
+			table.insert(private.History, amount)
+		end,
+	},
+
+	Public = {
+		Deposit = function(_self, private, amount)
+			private.Balance += amount
+			private:Record(amount)
+		end,
+
+		GetBalance = function(_self, private)
+			return private.Balance
+		end,
+	},
+
+	Static = {
+		Currency = "Credits",
+
+		Open = function(openingBalance)
+			return Wallet(openingBalance)
+		end,
+	},
+})
+```
+
+```lua
+local wallet = Wallet.Open(100)
+wallet:Deposit(25)
+
+wallet:GetBalance() -- 125
+wallet.Balance -- nil
+wallet.Record -- nil
+Wallet.Currency -- "Credits"
+wallet.Currency -- nil
+```
+
+### Public Members
+
+`Public` contains fields and methods visible on instances. Grouped public
+functions use this signature:
+
+```lua
+function(self, private, ...arguments)
+```
+
+`private` is the hidden state owned by the class that declared the method.
+Calling a grouped public method on anything other than a constructed instance
+raises [`VG-CLASS-001`](../errors/index.md#vg-class-001).
+
+Top-level methods remain public and retain the legacy `(self, ...arguments)`
+signature. This keeps existing classes source-compatible:
+
+```lua
+function Wallet:GetDisplayName()
+	return self.Name
+end
+```
+
+### Private Members
+
+`Private` values are stored in a side table keyed by instance and owning class.
+They are not copied onto the public instance or class table.
+
+- Non-function defaults are deep-cloned for each instance.
+- Nested tables are not shared between instances.
+- Private methods are bound into the private state.
+- `private:Method(...)` and `private.Method(...)` are both accepted.
+- External reads of private names return nil unless a separate public field uses
+  that name.
+
+`Private.Constructor` receives `(self, private, ...arguments)` and is the place
+to derive hidden state from constructor arguments.
+
+Privacy is runtime encapsulation, not a security boundary. A public method can
+still intentionally return a private value, and all client code remains visible
+to the client.
+
+### Static Members
+
+`Static` members live on the class table and are excluded from instance lookup.
+Static members inherit through class inheritance:
+
+```lua
+Wallet.Currency -- "Credits"
+PremiumWallet.Currency -- "Credits"
+wallet.Currency -- nil
+```
+
+Add or replace a static member after class creation with:
+
+```lua
+Wallet:SetStatic("MaximumBalance", 1_000_000)
+Class.setStatic(Wallet, "MaximumBalance", 1_000_000)
+```
+
+Direct assignments such as `Wallet.NewMethod = function() end` remain public by
+default for compatibility. Use `SetStatic` when the member must remain
+class-only.
+
+### Access Conflicts
+
+A member name may have only one access category in a class definition. Vanguard
+raises [`VG-CLASS-002`](../errors/index.md#vg-class-002) when:
+
+- a key appears in more than one of `Public`, `Private`, or `Static`;
+- a grouped member duplicates a top-level member;
+- a group uses a reserved Vanguard key;
+- a child changes an inherited public member into static or vice versa;
+- a static declaration uses a metamethod name.
+
+Base and child private states are separate. An inherited base public method
+receives base-private state; a child public method receives child-private state.
+This prevents a subclass from accidentally depending on its parent's hidden
+representation.
+
 ## Definition Fields
 
 | Field | Required | Description |
@@ -36,10 +170,13 @@ Both forms are equivalent.
 | `Name` | Yes | Non-empty class and registry name |
 | `Extends` | No | Parent Vanguard class; main API also accepts a registered class name |
 | `Constructor` | No | Called for every new instance |
+| `Public` | No | Instance-visible members; functions receive `(self, private, ...)` |
+| `Private` | No | Per-instance hidden defaults and methods; may include `Constructor` |
+| `Static` | No | Class-only members excluded from instance lookup |
 
 All other fields are copied onto the class. Define instance methods in the definition or assign them afterward.
 
-Class definitions may not define `new`; use `Constructor` instead. Vanguard reserves `Extends`, `Extend`, `IsA`, `Super`, `new`, `__index`, and `__vanguardClass`.
+Class definitions may not define `new`; use `Constructor` instead. Vanguard reserves `Name`, `Extends`, `Extend`, `IsA`, `Public`, `Private`, `Static`, `SetStatic`, `Super`, `new`, `__index`, `__metatable`, and `__vanguardClass`.
 
 ## Inheritance
 
@@ -71,7 +208,9 @@ Vanguard.RegisterClass(PlayerEntity)
 
 ## Constructor Order
 
-Every constructor in the inheritance chain runs base-first. Every constructor receives the same argument list.
+Every class in the inheritance chain initializes base-first. For each class,
+`Private.Constructor` runs before the legacy top-level `Constructor`; both
+receive the same construction arguments.
 
 ```lua
 local playerEntity = PlayerEntity("entity-1", player)
@@ -80,7 +219,9 @@ local playerEntity = PlayerEntity("entity-1", player)
 Call order:
 
 ```text
+Entity.Private.Constructor(instance, entityPrivate, "entity-1", player)
 Entity.Constructor(instance, "entity-1", player)
+PlayerEntity.Private.Constructor(instance, playerPrivate, "entity-1", player)
 PlayerEntity.Constructor(instance, "entity-1", player)
 ```
 

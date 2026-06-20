@@ -7,7 +7,7 @@ This guide installs Vanguard, creates a server service and client controller, an
 - Roblox Studio
 - A Rojo project
 - Wally `0.3.x`
-- Vanguard `0.1.13`
+- Vanguard `0.1.14`
 
 Vanguard is dependency-free. Its utility modules are included in the package.
 
@@ -17,7 +17,7 @@ Add Vanguard to the game project's `wally.toml`:
 
 ```toml
 [dependencies]
-Vanguard = "twrblxdevs/vanguard@0.1.13"
+Vanguard = "twrblxdevs/vanguard@0.1.14"
 ```
 
 Install dependencies:

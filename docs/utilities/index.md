@@ -17,13 +17,16 @@ local Promise = require(Vanguard.Util.Promise)
 | `Class` | Constructors and inheritance | [Classes](../classes/index.md) |
 | `Cleaner` | Deterministic resource cleanup | [Cleaner](cleaner/index.md) |
 | `Component` | Tagged Instance behavior | [Components](../components/index.md) |
+| `Error` | Stable error codes and documentation links | [Errors](../errors/index.md) |
 | `Logger` | Scoped level-based output | [Logger](logger/index.md) |
+| `Math` | Interpolation, remapping, easing, wrapping, and quantization | [Math](math/index.md) |
 | `NetworkGuard` | Standalone request guard pipeline | [NetworkGuard](network-guard/index.md) |
 | `Promise` | Asynchronous composition | [Promise](promise/index.md) |
 | `RateLimiter` | Per-key rolling-window limits | [RateLimiter](rate-limiter/index.md) |
 | `RemoteProperty` | Server-owned replicated state | [Networking](../networking/index.md#remote-properties) |
 | `RemoteSignal` | Bidirectional remote events | [Networking](../networking/index.md#remote-signals) |
 | `Signal` | Local event dispatch | [Signal](signal/index.md) |
+| `Switch` | Ordered case dispatch without fall-through | [Switch](switch/index.md) |
 | `Validator` | Runtime payload and data schemas | [Validator](validator/index.md) |
 
 ## Framework Shortcuts
@@ -39,6 +42,14 @@ local component = Vanguard.CreateComponent(definition)
 ```
 
 The first three create utility objects. `CreateClass` and `CreateComponent` also register their results.
+
+`Error`, `Math`, and `Switch` are also exposed directly on the main module:
+
+```lua
+local message = Vanguard.Error.format("VG-CORE-001", "Example failure")
+local alpha = Vanguard.Math.inverseLerp(0, 100, 25)
+local result = Vanguard.Switch.match(state, { Ready = "Start" }, "Wait")
+```
 
 ## Type Exports
 

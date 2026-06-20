@@ -80,6 +80,8 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Changelog: changelog/index.md
+  - Roadmap: roadmap/index.md
   - Get Started:
       - Getting Started: getting-started/index.md
       - Configuration: configuration/index.md
@@ -92,11 +94,15 @@ nav:
   - Networking:
       - Networking: networking/index.md
       - Network Security: network-security/index.md
+      - Protocol 1: network-protocol/index.md
   - Reference:
       - API Reference: api-reference/index.md
       - Type System: type-system/index.md
+      - Errors: errors/index.md
   - Utilities:
       - Overview: utilities/index.md
+      - Math: utilities/math/index.md
+      - Switch: utilities/switch/index.md
       - Promise: utilities/promise/index.md
       - Cleaner: utilities/cleaner/index.md
       - Signal: utilities/signal/index.md

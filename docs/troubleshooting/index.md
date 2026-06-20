@@ -33,7 +33,7 @@ Checks:
 
 ```toml
 [dependencies]
-Vanguard = "twrblxdevs/vanguard@0.1.13"
+Vanguard = "twrblxdevs/vanguard@0.1.14"
 ```
 
 Run:
@@ -58,7 +58,7 @@ Example:
 ReplicatedStorage.Packages._Index.twrblxdevs_vanguard@0.1.9...
 ```
 
-If source code says `0.1.13` but Studio shows `0.1.9`, the game is executing an installed old package.
+If source code says `0.1.14` but Studio shows `0.1.9`, the game is executing an installed old package.
 
 1. update the game project's `wally.toml`;
 2. run `wally install` in the game project, not only the Vanguard source repository;
@@ -205,6 +205,9 @@ Server and client are executing incompatible Vanguard packages or a stale remote
 - verify bootstrap scripts require the same `ReplicatedStorage.Packages.Vanguard` ModuleScript.
 
 A package-version mismatch with the same protocol warns but remains usable. An actual protocol mismatch errors before proxy construction.
+
+See [`VG-NET-001`](../errors/index.md#vg-net-001) and the complete
+[Network Protocol 1 specification](../network-protocol/index.md).
 
 ## `[VanguardNetwork/INVALID_PAYLOAD]`
 

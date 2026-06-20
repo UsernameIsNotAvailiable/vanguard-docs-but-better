@@ -43,10 +43,16 @@ type Class = Vanguard.Class
 type ClassDefinition = Vanguard.ClassDefinition
 type Cache = Vanguard.Cache
 type Cleaner = Vanguard.Cleaner
+type ErrorDefinition = Vanguard.ErrorDefinition
+type VanguardError = Vanguard.VanguardError
+type ErrorUtil = Vanguard.ErrorUtil
 type Logger = Vanguard.Logger
+type MathUtil = Vanguard.MathUtil
 type Promise = Vanguard.Promise
 type RateLimiter = Vanguard.RateLimiter
 type Signal = Vanguard.Signal
+type Switch = Vanguard.Switch
+type SwitchUtil = Vanguard.SwitchUtil
 
 type RemoteSignal = Vanguard.RemoteSignal
 type RemoteProperty = Vanguard.RemoteProperty
@@ -159,17 +165,23 @@ Every utility module exports its own detailed types:
 local Cache = require(Vanguard.Util.Cache)
 local Class = require(Vanguard.Util.Class)
 local Cleaner = require(Vanguard.Util.Cleaner)
+local Error = require(Vanguard.Util.Error)
+local Math = require(Vanguard.Util.Math)
 local NetworkGuard = require(Vanguard.Util.NetworkGuard)
 local Promise = require(Vanguard.Util.Promise)
 local RateLimiter = require(Vanguard.Util.RateLimiter)
+local Switch = require(Vanguard.Util.Switch)
 local Validator = require(Vanguard.Util.Validator)
 
 type CacheOptions = Cache.Options
 type ClassDefinition = Class.Definition
 type Cleaner = Cleaner.Cleaner
+type ErrorDefinition = Error.Definition
+type VanguardError = Error.VanguardError
 type GuardRule = NetworkGuard.Rule
 type Promise = Promise.Promise
 type RateLimiterOptions = RateLimiter.Options
+type SwitchBuilder = Switch.Switch
 type ValidatorFunction = Validator.Validator
 ```
 
@@ -197,6 +209,29 @@ local EntityClass = Vanguard.CreateClass({
 })
 
 local entity = EntityClass("entity-1") :: Entity
+```
+
+Grouped class functions receive private state as their second argument. Model
+that implementation-only parameter locally; it is not part of the public
+instance shape:
+
+```lua
+type Wallet = {
+	GetBalance: (self: Wallet) -> number,
+}
+
+local WalletClass = Vanguard.CreateClass({
+	Name = "Wallet",
+	Private = { Balance = 0 },
+	Public = {
+		GetBalance = function(_self, private): number
+			return private.Balance
+		end,
+	},
+	Static = { Currency = "Credits" },
+})
+
+local wallet = WalletClass() :: Wallet
 ```
 
 ## Typed Validators

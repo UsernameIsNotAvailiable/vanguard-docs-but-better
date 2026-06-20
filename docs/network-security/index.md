@@ -178,6 +178,9 @@ Built-in codes:
 | `UNVERIFIED` | A verification callback returned false |
 | `GUARD_ERROR` | A guard callback or limiter threw |
 
+Client-visible function and property rejections retain these names and include
+a direct catalog link. See the [network error mapping](../errors/index.md#network-rejection-mapping).
+
 `RetryAfter` is set for rate-limit rejections. `Detail` contains internal callback errors and is used only in server logging/callbacks; the formatted client error remains generic for guard failures.
 
 ## Transport Behavior
@@ -354,6 +357,11 @@ print(info.Protocol, info.ServerVersion)
 ```
 
 Current protocol: `1`.
+
+The protocol also specifies remote hierarchy, publication timing, Player
+identity, function and signal call shapes, property transport, rejection
+behavior, and compatibility gating. See the complete
+[Network Protocol 1 specification](../network-protocol/index.md).
 
 ## Security Checklist
 

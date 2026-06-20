@@ -224,4 +224,4 @@ For specific service/controller fields, intersect custom shapes with base types.
 - Server-only services are not looked up from the client.
 - Client-facing remotes have validation and authorization policy.
 - Wally and Rojo mappings point to the new package alias.
-- Studio output shows Vanguard `0.1.13` on both runtimes.
+- Studio output shows Vanguard `0.1.14` on both runtimes.

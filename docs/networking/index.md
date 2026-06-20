@@ -31,6 +31,8 @@ Supported `Client` values:
 | `CreateProperty(value)` | Server RemoteProperty | Client RemoteProperty |
 
 Unsupported values fail server startup with the service and key name.
+Framework failures include a stable code and a direct link to the
+[Error Reference](../errors/index.md).
 
 ## Remote Functions
 
@@ -280,6 +282,15 @@ print(info.Protocol, info.ServerVersion)
 On the server this immediately returns protocol and server version. On the client fields are populated when the remote container is first resolved.
 
 Current network protocol: `1`.
+
+Protocol `1` is more than a version attribute: it defines the replicated
+`_VanguardRemotes` hierarchy, service folders, function and signal call shapes,
+property `_Get` and `_Changed` children, Roblox-supplied Player identity, guard
+timing, rejection transport, and client discovery handshake.
+
+Read the complete [Network Protocol 1 specification](../network-protocol/index.md)
+for the wire contract, compatibility matrix, publication timeline, and rules
+for future protocol bumps.
 
 ## Security Boundary
 

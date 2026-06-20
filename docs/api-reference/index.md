@@ -16,11 +16,14 @@ Utility object methods use normal colon syntax unless documented otherwise.
 | Field | Runtime | Description |
 | --- | --- | --- |
 | `Name` | Both | `"Vanguard"` |
-| `Version` | Both | Installed framework version, currently `0.1.13` |
+| `Version` | Both | Installed framework version, currently `0.1.14` |
 | `NetworkProtocol` | Both | Network compatibility version, currently `1` |
 | `Player` | Client | `Players.LocalPlayer` |
 | `Util` | Both | Folder containing all utility ModuleScripts |
+| `Error` | Both | Linked error-code utility; alias of `Vanguard.Util.Error` |
 | `Logger` | Both | Root framework logger |
+| `Math` | Both | Number helper utility; alias of `Vanguard.Util.Math` |
+| `Switch` | Both | Case-dispatch utility; alias of `Vanguard.Util.Switch` |
 | `Services` | Server | Service registry |
 | `Controllers` | Client | Controller registry |
 | `Components` | Both | Component registry |
@@ -119,6 +122,36 @@ Vanguard.CreateRateLimiter(options: RateLimiterOptions): RateLimiter
 ```
 
 Shortcut for `Vanguard.Util.RateLimiter.new(options)`.
+
+### Error
+
+```lua
+Vanguard.Error.format(code: string, message: string?, cause: any?): string
+Vanguard.Error.raise(code: string, message: string?, cause: any?, level: number?)
+```
+
+Formats or throws errors with stable codes and direct documentation links. See
+the [Error Reference](../errors/index.md).
+
+### Math
+
+```lua
+Vanguard.Math.map(value, inMin, inMax, outMin, outMax, clampResult?)
+Vanguard.Math.moveTowards(current, target, maxDelta)
+```
+
+Provides interpolation, range mapping, easing, wrapping, snapping, comparison,
+and averaging helpers. See [Math](../utilities/math/index.md).
+
+### Switch
+
+```lua
+Vanguard.Switch.new(value):Case(expected, result):Default(result):Run(...)
+Vanguard.Switch.match(value, cases, defaultResult?, ...)
+```
+
+Provides ordered builder dispatch and concise direct-map dispatch without
+fall-through. See [Switch](../utilities/switch/index.md).
 
 ## Update Check
 
@@ -298,7 +331,9 @@ Returns the component registry.
 Vanguard.CreateClass<T>(definition: T): Class & T
 ```
 
-Creates and registers a class. A string `Extends` field resolves an already-registered parent.
+Creates and registers a class. A string `Extends` field resolves an
+already-registered parent. Definitions may group instance API in `Public`,
+per-instance hidden state in `Private`, and class-only API in `Static`.
 
 ### RegisterClass
 
@@ -404,3 +439,5 @@ One bad module does not stop the remaining modules from loading.
 - [Lifecycle](../lifecycle/index.md)
 - [Type System](../type-system/index.md)
 - [Utilities](../utilities/index.md)
+- [Error Reference](../errors/index.md)
+- [Network Protocol 1](../network-protocol/index.md)

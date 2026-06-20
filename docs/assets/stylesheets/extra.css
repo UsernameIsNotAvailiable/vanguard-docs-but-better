@@ -165,6 +165,13 @@ body {
   overflow: hidden;
 }
 
+.md-typeset .md-typeset__table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
 .md-typeset table:not([class]) {
   border: 1px solid var(--vanguard-line);
   border-radius: 4px;
@@ -246,11 +253,6 @@ body {
 
   .md-typeset h1 {
     font-size: 1.65rem;
-  }
-
-  .md-typeset table:not([class]) {
-    display: block;
-    overflow-x: auto;
   }
 }
 
